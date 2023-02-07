@@ -1,28 +1,25 @@
 class Solution {
     public int totalFruit(int[] fruits) {
-        // Maximum number of fruits we can pick
-        int maxPicked = 0;
+        // Hash map 'basket' to store the types of fruits.
+        Map<Integer, Integer> basket = new HashMap<>();
+        int left = 0, right;
         
-        // Iterate over all subarrays (left, right)
-        for (int left = 0; left < fruits.length; ++left) {
-            for (int right = 0; right < fruits.length; ++right) {
-                // Use a set to count the type of fruits.
-                Set<Integer> basket = new HashSet<>();
-                
-                // Iterate over the current subarray.
-                for (int currentIndex = left; currentIndex <= right; ++currentIndex) {
-                    basket.add(fruits[currentIndex]);
-                }
-                
-                // If the number of types of fruits in this subarray (types of fruits) 
-                // is no larger than 2, this is a valid subarray, update 'maxPicked'.
-                if (basket.size() <= 2) {
-                    maxPicked = Math.max(maxPicked, right - left + 1);
-                }
+        // Add fruit from right side (right) of the window.
+        for (right = 0; right < fruits.length; ++right) {
+            basket.put(fruits[right], basket.getOrDefault(fruits[right], 0) + 1);
+            
+            // If the current window has more than 2 types of fruit,
+            // we remove one fruit from the left index (left) of the window.
+            if (basket.size() > 2) {
+                basket.put(fruits[left], basket.get(fruits[left]) - 1);
+                if (basket.get(fruits[left]) == 0)
+                    basket.remove(fruits[left]);
+                left++;
             }
         }
         
-        // Return 'maxPicked' as the maximum length (maximum number of fruits we can pick).
-        return maxPicked;
+        // Once we finish the iteration, the indexes left and right 
+        // stands for the longest valid subarray we encountered.
+        return right - left;
     }
 }
