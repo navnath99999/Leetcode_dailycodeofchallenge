@@ -1,0 +1,42 @@
+public class Solution 
+{
+
+    public ListNode detect(ListNode head)
+    {
+        ListNode s = head;
+        
+        ListNode f = head;
+        
+        while(f!=null && f.next!=null)
+        {
+            s = s.next;
+            
+            f = f.next.next;
+            
+            if(s == f)
+            {
+                return s;
+            }
+        }
+        return null;
+    } 
+	
+    public ListNode detectCycle(ListNode head) 
+    {
+        ListNode temp=detect(head);
+        
+        if(temp==null)
+        {
+            return null;
+        }
+        ListNode beg=head;
+        
+        while(beg!=temp)
+        {
+            beg=beg.next;
+            
+            temp=temp.next;
+        }
+        return beg;
+    }
+}
